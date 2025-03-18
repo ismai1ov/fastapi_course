@@ -7,7 +7,7 @@ app = FastAPI()
 @app.get("/user/{name}")
 async def user(name: str = Path(min_length=4,
                                 max_length=20,
-                                description="Enter your name")):
+                                description="Enter your name")) -> dict:
     return {"user_name": name}
 
 #2
@@ -15,7 +15,7 @@ async def user(name: str = Path(min_length=4,
 @app.get("/category/{category_id}/products")
 async def category(page: int, 
                    category_id: int = Path(gt=0,
-                                           description="Category ID")):
+                                           description="Category ID")) -> dict:
     return {"category_id": category_id, "page": page}
 
 profiles_dict = {
@@ -27,7 +27,7 @@ profiles_dict = {
 @app.get("/users")
 async def retrieve_user_profile(username: str = Query(min_length=2,
                                                       max_length=50,
-                                                      description="Имя пользователя")):
+                                                      description="Имя пользователя")) -> dict:
     if username in profiles_dict:
         return profiles_dict.get(username)
     else:
