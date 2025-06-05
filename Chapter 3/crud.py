@@ -22,7 +22,7 @@ async def get_message(message_id: int) -> str:
 async def create_message(message:str) -> str:
     pass 
 
-
+# change data
 @app.put("/message/{message_id}")
 async def update_message(message_id:int, message:str) -> str:
     pass
