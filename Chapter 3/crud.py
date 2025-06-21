@@ -1,27 +1,35 @@
 from fastapi import FastAPI, status, Body
+from pydantic import BaseModel
+
+class Message(BaseModel):
+    id: int
+    text: str
 
 app = FastAPI()
 
-messages_db = {0: "First post in FastAPI"}
+messages_db = []
 
 
 # getting all data
 @app.get("/")
 async def get_all_messages() -> dict:
-    return messages_db
+    return {"Messages": messages_db}
 
 
 # getting data by identifier
 @app.get("/message/{message_id}")
-async def get_message(message_id: int) -> str:
+async def get_message(message_id: int):
     return messages_db[message_id]
 
 
 # adding data
 @app.post("/message", status_code=status.HTTP_201_CREATED)
-async def create_message(message:str = Body()) -> str:
-    current_index = int(max(messages_db, key=int)) + 1
-    messages_db[current_index] = message
+async def create_message(message:Message) -> str:
+    if messages_db:
+        message.id = max(messages_db, key=lambda m: m.id).id + 1
+    else:
+        message.id = 0
+    messages_db.append(message)
     return "Message created!"
 
 
